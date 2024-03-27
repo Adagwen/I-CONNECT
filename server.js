@@ -36,6 +36,11 @@ app.use("/api/customers", require("./router/customerRoutes"));
 app.use("/api/services", require("./router/dataVendorRoutes"));
 app.use("/api/booking", require("./router/bookingRoutes"))
 app.use("/api/rating", require("./router/ratingReviewRoutes"))
+app.get("/home", (req,res) => {
+    res.send("welcome")
+})
+
+
 
 app.use(errorHandler);
 
