@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Customer = require("../models/customerModel");
+const {sendEmailNotification} = require("../notification-email/emailNotifier")
 
 //@desc Register a customer
 //@route POST /api/customers/register
@@ -30,9 +31,17 @@ const registerCustomer = asyncHandler(async(req,res)=>{
         password: hashedPassword
     });
 
+    const details = {
+        from: '"Ada" <AdaobiEzeokafor@womentechsters.org>', // sender address
+      to: email, // recipient address
+      subject: "verify email address",
+      html: `<p>Hello ${name}</p>`,
+    }
+    await sendEmailNotification(details);
+
     console.log(`Customer created successfully ${customer}`);
     if (customer) {
-        res.status(201).json({_id: customer.id, email: customer.email });
+        res.status(201).json({_id: customer.id, email: customer.email, message: "Customer created successfully" });
     } else {
         res.status(400);
         throw new Error("Customer data is not valid");

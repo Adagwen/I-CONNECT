@@ -2,6 +2,9 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Vendor = require("../models/vendorModel");
+const {sendEmailNotification} = require("../notification-email/emailNotifier")
+// import { sendMail } from "../nodemailer/emailNotifier";
+
 
 //@desc Register a customer
 //@route POST /api/customers/register
@@ -30,9 +33,17 @@ const registerVendor = asyncHandler(async(req,res)=>{
         password: hashedPassword
     });
 
+    const details = {
+        from: '"Ada" <AdaobiEzeokafor@womentechsters.org>', // sender address
+      to: email, // recipient address
+      subject: "verify email address",
+      html: `<p>Hello ${name}</p>`,
+    }
+    await sendEmailNotification(details);
+
     console.log(`Vendor created successfully ${vendor}`);
     if (vendor) {
-        res.status(201).json({_id: vendor.id, email: vendor.email });
+        res.status(201).json({_id: vendor.id, email: vendor.email, message: "Vendor created successfully"});
     } else {
         res.status(400);
         throw new Error("Vendor data is not valid");
@@ -77,7 +88,9 @@ const currentVendor = asyncHandler(async(req,res)=>{
     res.json(req.customer);// this should give you the user info
 });
 
-
-
-
 module.exports = {registerVendor, loginVendor, currentVendor};
+
+// sendMail(options, (info) => {
+//     console.log("Email sent successfully");
+//     console.log("MESSAGE ID: ", info.messageId);
+// });

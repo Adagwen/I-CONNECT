@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Booking = require("../models/bookingModel");
+const {sendEmailNotification} = require("../notification-email/emailNotifier");
 
 //@desc Register a customer
 //@route POST /api/customers/register
@@ -19,7 +20,7 @@ const createBooking = asyncHandler(async (req, res) => {
   //     throw new Error("Booking already made.")
   // }
   console.log(generateRandomBookingId());
-  //creating a new vendor
+  //creating a new booking
   const bookingData = {
     bookingId: generateRandomBookingId(),
     customerId,
@@ -34,6 +35,17 @@ const createBooking = asyncHandler(async (req, res) => {
     const newBooking = new Booking(bookingData);
 
     newBooking.save();
+
+    //send notification email to the vendor
+    const vendorEmail = 'adaanunike@gmail.com';
+    const emailDetails = {
+      from: '"Your App" <AdaobiEzeokafor@womentechsters.org>',
+      to: vendorEmail,
+      subject: 'New Booking Notification',
+      html: `<p>Hello Vendor</p>`
+              `<p>You have a new booking. Please login to your account to view details</p>`
+    } ;
+    await sendEmailNotification(emailDetails);
 
     if (newBooking) {
         //res.status(201).json({bookingId});
@@ -55,41 +67,6 @@ function generateRandomBookingId() {
   return `BK-${randomString}-${timestamp}`; // Combine with prefix for clarity
 }
 
-// //@desc Login customer
-// //@route POST /api booking/customers/login
-// //@access public
-// const loginVendor = asyncHandler(async(req,res)=>{
-//     const { email, password } = req.body;
-//     if (!email || !password) {
-//         res.status(400);
-//         throw new Error("All fields are mandatory.");
-//     }
-//     const vendor = await Vendor.findOne({email});
-//     //compare password with hashedpassword
-//     if(vendor && (await bcrypt.compare(password, vendor.password))) {
-//         const accessToken = jwt.sign({
-//     //this is the payload we are going to embed in our token
-//             vendor: {
-//                 username: vendor.username,
-//                 email: vendor.email,
-//                 id: vendor.id
-//             },
-//         }, process.env.ACCESS_TOKEN_SECRET,
-//         {expiresIn: "15m"}
-//         );
-//         res.status(200).json({accessToken});
-//     }else {
-//         res.status(401)
-//         throw new Error("email or password is not valid");
-//     }
 
-// });
-
-// //@desc current user info
-// //@route POST /api/users/register
-// //@access private
-// const currentVendor = asyncHandler(async(req,res)=>{
-//     res.json(req.customer);// this should give you the user info
-// });
 
 module.exports = { createBooking };
