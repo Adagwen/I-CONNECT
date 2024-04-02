@@ -7,28 +7,10 @@ const Customer = require("../models/customerModel");
 //@route Get /api/customers
 //@access private
 const getCustomers = asyncHandler(async(req,res) => {
-    const customers = await Customer.find({user_id: req.user.id}); //{user_id: req.user.id}
+    const customers = await Customer.find(); 
     res.status(200).json(customers);
 });
 
-// // @desc Create New customers
-// // @route POST /api/customers
-// // @access private
-// const createCustomer = asyncHandler(async(req,res) => {
-//     console.log("The request body is :", req.body);
-//     const{name, email, phone} = req.body;
-//     if(!name || !email || !phone) {
-//         res.status(400);
-//         throw new Error("All the fields are mandatory !!");
-//     }
-// const customer = await Customer.create({
-//     name,
-//     email,
-//     phone,
-//     user_id: req.user.id
-// });
-//   res.status(201).json(customer);
-// });
 
 //@desc Get customer
 //@route POST /api/customer

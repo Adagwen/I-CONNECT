@@ -4,7 +4,6 @@ const express = require("express");
 const router = express.Router();
 const{
     getVendor, 
-    createVendor,
     getVendors,
     updateVendor,
     deleteVendor
@@ -18,7 +17,6 @@ const validateToken = require("../middleware/validateToken");
 
 //router.use(validateToken);//use this for all the route
 router.route("/").get(getVendors);
-router.route("/").post(createVendor);
 router.route( "/:id").get(getVendor);
 router.route( "/:id").put(updateVendor);
 router.route( "/:id").delete(deleteVendor);
