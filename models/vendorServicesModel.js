@@ -5,7 +5,8 @@ const mongoose = require("mongoose");
 const vendorServiceSchema = new mongoose.Schema ({
     vendor: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "VendorService",
+        //ref: "VendorService",
+        ref: "Vendor",
         required: true
     },
     category: {
@@ -31,7 +32,7 @@ const vendorServiceSchema = new mongoose.Schema ({
     //other relevant fields as needed
 });
 
-module.exports = mongoose.model("vendor", vendorServiceSchema);
+module.exports = mongoose.model("vendorService", vendorServiceSchema);
 
 // This schema defines a Vendor Service model with fields like:
 
