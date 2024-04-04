@@ -73,7 +73,7 @@ const loginVendor = asyncHandler(async(req,res)=>{
         }, process.env.ACCESS_TOKEN_SECRET,
         {expiresIn: "15m"}
         );
-        res.status(201).json({_id: vendor._id, email: vendor.email,accessToken, message: "Vendor logged in successfully"});
+        res.status(200).json({_id: vendor._id, email: vendor.email,accessToken, message: "Vendor logged in successfully"});
         // res.status(200).json({accessToken});
     }else {
         res.status(401)
