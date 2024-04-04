@@ -37,12 +37,12 @@ const createBooking = asyncHandler(async (req, res) => {
     newBooking.save();
 
     //send notification email to the vendor
-    const vendorEmail = 'Uchealex@gmail.com';
+    const vendorEmail = 'jesudunsinadesina@gmail.com';
     const emailDetails = {
       from: '"Your App" <AdaobiEzeokafor@womentechsters.org>',
       to: vendorEmail,
       subject: 'New Booking Notification',
-      html: `<p>Hello Alex</p>` +
+      html: `<p>Hello Dusin</p>` +
               `<p>You have a new booking. Please login to your account to view details</p>`
     } ;
     await sendEmailNotification(emailDetails);

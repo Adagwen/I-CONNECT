@@ -2,6 +2,7 @@
 const express = require('express');
 const errorHandler = require("./middleware/errHandler");
 const databaseConnect = require("./config/dbConnection");
+const cors = require('cors');
 //const passport = require('./passport-config');
 const dotenv = require("dotenv").config();
 
@@ -9,6 +10,7 @@ const dotenv = require("dotenv").config();
 databaseConnect();
 const app = express();
 const port = process.env.PORT || 5000;
+app.use(cors());
 
 app.use(express.json());
 
