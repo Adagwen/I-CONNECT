@@ -41,7 +41,7 @@ const registerCustomer = asyncHandler(async(req,res)=>{
 
     console.log(`Customer created successfully ${customer}`);
     if (customer) {
-        res.status(201).json({_id: customer.id, email: customer.email, message: "Customer created successfully" });
+        res.status(201).json({_id: customer._id, email: customer.email, message: "Customer created successfully" });
     } else {
         res.status(400);
         throw new Error("Customer data is not valid");
@@ -66,12 +66,14 @@ const loginCustomer = asyncHandler(async(req,res)=>{
             customer: {
                 username: customer.username,
                 email: customer.email,
-                id: customer.id
+                id: customer._id
             },
         }, process.env.ACCESS_TOKEN_SECRET,
         {expiresIn: "15m"}
         );
-        res.status(200).json({accessToken});
+
+        res.status(200).json({_id: customer._id, email: customer.email, accessToken, message: "Customer logged in successfully" });
+        // res.status(200).json({accessToken});
     }else {
         res.status(401)
         throw new Error("email or password is not valid");

@@ -43,7 +43,7 @@ const registerVendor = asyncHandler(async(req,res)=>{
 
     console.log(`Vendor created successfully ${vendor}`);
     if (vendor) {
-        res.status(201).json({_id: vendor.id, email: vendor.email, message: "Vendor created successfully"});
+        res.status(201).json({_id: vendor._id, email: vendor.email, message: "Vendor created successfully"});
     } else {
         res.status(400);
         throw new Error("Vendor data is not valid");
@@ -68,12 +68,13 @@ const loginVendor = asyncHandler(async(req,res)=>{
             vendor: {
                 username: vendor.username,
                 email: vendor.email,
-                id: vendor.id
+                id: vendor._id
             },
         }, process.env.ACCESS_TOKEN_SECRET,
         {expiresIn: "15m"}
         );
-        res.status(200).json({accessToken});
+        res.status(201).json({_id: vendor._id, email: vendor.email,accessToken, message: "Vendor logged in successfully"});
+        // res.status(200).json({accessToken});
     }else {
         res.status(401)
         throw new Error("email or password is not valid");
