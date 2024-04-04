@@ -24,14 +24,19 @@ const vendorSchema = mongoose.Schema({
         type: String,
         required: [true, "Please add the vendors username"],
     },
+    location: {
+        type: String,
+        required: [true, "Please add the vendors location"],
+    }, 
+        
     password: {
         type: String,
         required: [true, "Please add the vendors password"],
+    },
+},
+    {
+        timestamps: true,
     }
-    
-    
-}, {
-    timestamps: true,
-});
+);
 
 module.exports = mongoose.model("Vendor", vendorSchema);

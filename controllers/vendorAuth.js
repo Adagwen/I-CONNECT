@@ -11,7 +11,7 @@ const {sendEmailNotification} = require("../notification-email/emailNotifier")
 //@access public
 const registerVendor = asyncHandler(async(req,res)=>{
     const {name,email,phone,username, password} = req.body;
-    if (!name || !email || !phone || !username || !password) {
+    if (!name || !email || !phone || !username || !password || !location) {
         res.status(400);
         throw new Error("All fields are mandatory");
     }
