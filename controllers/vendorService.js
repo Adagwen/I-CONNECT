@@ -7,7 +7,7 @@ const newServiceDetails = asyncHandler(async(req,res)=>{
     console.log(req.body)
     console.log(req.params)
     try {
-        const { category = "", description = "", pricing = "", location = "", imageUrl = ""} = req.body;
+        const { category = "", subCategory = "", description = "", pricing = "", location = "", imageUrl = ""} = req.body;
 
         //check if the vendor is logged in and authorized to create service
 
@@ -17,6 +17,7 @@ const newServiceDetails = asyncHandler(async(req,res)=>{
         const newService = new Service({
             vendor: req.params.vendor_id,
             category,
+            subCategory,
             description,
             pricing,
             location,
