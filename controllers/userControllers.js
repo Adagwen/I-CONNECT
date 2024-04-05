@@ -9,7 +9,7 @@ const { sendEmailNotification } = require("../notification-email/emailNotifier")
 //@access public
 const signup = asyncHandler(async (req, res) => {
     const { role, name, email, phone, username, password, location } = req.body;
-    if (!role || !name || !email || !phone || !username || !password) {
+    if (!name || !email || !phone || !username || !password) {
         res.status(400);
         throw new Error("All fields are mandatory");
     }
@@ -88,10 +88,77 @@ const currentUser = asyncHandler(async (req, res) => {
     res.json(req.user); // This should give you the user info
 });
 
+
+//@desc Get all users (customers or vendors)
+//@route Get /api/users
+//@access private
+const getUsers = asyncHandler(async (req, res) => {
+    const users = await User.find(); 
+    res.status(200).json(users);
+});
+
+//@desc Get user (customer or vendor) by ID
+//@route GET /api/users/:id
+//@access private
+const getUserById = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+        res.status(404);
+        throw new Error("User not found");
+    }
+    res.status(200).json(user);
+});
+
+//@desc Update user (customer or vendor) by ID
+//@route PUT /api/users/:id
+//@access private
+const updateUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+        res.status(404);
+        throw new Error("User not found");
+    }
+
+    if (user.user_id.toString() !== req.user.id) {
+        res.status(403);
+        throw new Error("User does not have permission to update other users");
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new: true }
+    );
+    res.status(200).json(updatedUser);
+});
+
+//@desc Delete user (customer or vendor) by ID
+//@route DELETE /api/users/:id
+//@access private
+const deleteUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+        res.status(404);
+        throw new Error("User not found");
+    }
+    if (user.user_id.toString() !== req.user.id) {
+        res.status(403);
+        throw new Error("User does not have permission to delete other users");
+    }
+
+    await User.deleteOne({ _id: req.params.id });
+    res.status(200).json(user);
+});
+
+
 module.exports = {
     signup,
     login,
-    currentUser
+    currentUser,
+    getUsers,
+    getUserById,
+    updateUser,
+    deleteUser
 };
 
 // Additional endpoints for getting, updating, and deleting users can be added here.
