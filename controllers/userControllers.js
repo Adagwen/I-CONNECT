@@ -9,7 +9,7 @@ const { sendEmailNotification } = require("../notification-email/emailNotifier")
 //@access public
 const signup = asyncHandler(async (req, res) => {
     const { role, name, email, phone, username, password, location } = req.body;
-    if (!name || !email || !phone || !username || !password) {
+    if (!role || !name || !email || !phone || !username || !password) {
         res.status(400);
         throw new Error("All fields are mandatory");
     }
