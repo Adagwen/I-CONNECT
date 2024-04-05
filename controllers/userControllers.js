@@ -112,6 +112,27 @@ const getUserById = asyncHandler(async (req, res) => {
 //@desc Update user (customer or vendor) by ID
 //@route PUT /api/users/:id
 //@access private
+// const updateUser = asyncHandler(async (req, res) => {
+//     const user = await User.findById(req.params.id);
+//     if (!user) {
+//         res.status(404);
+//         throw new Error("User not found");
+//     }
+
+//     if (user.user_id.toString() !== req.user.id) {
+//         res.status(403);
+//         throw new Error("User does not have permission to update other users");
+//     }
+
+//     const updatedUser = await User.findByIdAndUpdate(
+//         req.params.id,
+//         req.body,
+//         { new: true }
+//     );
+//     res.status(200).json(updatedUser);
+// });
+
+
 const updateUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
     if (!user) {
@@ -124,13 +145,27 @@ const updateUser = asyncHandler(async (req, res) => {
         throw new Error("User does not have permission to update other users");
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        { new: true }
-    );
+    // Check if the request includes a password field
+    if ('password' in req.body) {
+        // If yes, hash the new password
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        // Update the password in the user document
+        user.password = hashedPassword;
+    } else {
+        // If no password field is present, update other profile fields
+        for (const key in req.body) {
+            if (key !== 'role' && key !== 'password') {
+                // Only update fields other than role and password
+                user[key] = req.body[key];
+            }
+        }
+    }
+
+    // Save the updated user document
+    const updatedUser = await user.save();
     res.status(200).json(updatedUser);
 });
+
 
 //@desc Delete user (customer or vendor) by ID
 //@route DELETE /api/users/:id
