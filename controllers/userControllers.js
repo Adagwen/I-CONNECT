@@ -43,7 +43,7 @@ const signup = asyncHandler(async (req, res) => {
 
     console.log(`User created successfully ${user}`);
     if (user) {
-        res.status(201).json({ _id: user._id, email: user.email, message: `${role} created successfully` });
+        res.status(200).json({ _id: user._id, email: user.email, message: `${role} created successfully` });
     } else {
         res.status(400);
         throw new Error(`${role} data is not valid`);
