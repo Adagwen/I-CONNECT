@@ -6,7 +6,7 @@ const vendorServiceSchema = new mongoose.Schema ({
     vendor: {
         type: mongoose.Schema.Types.ObjectId,
         //ref: "VendorService",
-        ref: "Vendor",
+        ref: "User",
         required: true
     },
     category: {
