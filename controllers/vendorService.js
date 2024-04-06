@@ -11,11 +11,11 @@ const newServiceDetails = asyncHandler(async(req,res)=>{
 
         //check if the vendor is logged in and authorized to create service
 
-        if (!req.params.vendor_id) {
+        if (!req.body.vendor_id) {
             return res.status(401).json({message: "Unauthorized"});
         }
         const newService = new Service({
-            vendor: req.params.vendor_id,
+            vendor: req.body.vendor_id,
             category,
             subCategory,
             description,
