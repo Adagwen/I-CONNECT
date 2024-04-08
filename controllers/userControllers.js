@@ -25,7 +25,8 @@ const signup = asyncHandler(async (req, res) => {
     // Create a new user (customer or vendor) based on the role
     const user = await User.create({
         role,
-        name,
+        firstName,
+        lastName,
         email,
         phone,
         username,
