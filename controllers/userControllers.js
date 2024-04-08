@@ -8,8 +8,8 @@ const { sendEmailNotification } = require("../notification-email/emailNotifier")
 //@route POST /api/users/register
 //@access public
 const signup = asyncHandler(async (req, res) => {
-    const { role, name, email, phone, username, password, location } = req.body;
-    if (!role || !name || !email || !phone || !username || !password) {
+    const { role, firstName, lastName, email, phone, username, password, location } = req.body;
+    if (!role || !firstName || !lastName || !email || !phone || !username || !password) {
         res.status(400);
         throw new Error("All fields are mandatory");
     }

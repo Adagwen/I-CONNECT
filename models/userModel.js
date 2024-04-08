@@ -6,9 +6,13 @@ const userSchema = mongoose.Schema({
         enum: ['vendor', 'customer'],
         required: true
     },
-    name: {
+    firstName: {
         type: String,
-        required: [true, "Please add the user's name"],
+        required: [true, "Please add the user's first name"],
+    },
+    lastName: {
+        type: String,
+        required: [true, "Please add the user's last name"],
     },
     email: {
         type: String,
