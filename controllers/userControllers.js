@@ -113,7 +113,11 @@ const getUser = asyncHandler(async(req,res) => {
         res.status(404);
         throw new Error("User not found");
      }
-    return res.status(200).json(user);
+     // Include availability if applicable
+ const availability = user.role === 'vendor' ? 'away' : null;
+
+ return res.status(200).json({ ...user._doc, availability }); 
+    //return res.status(200).json(user);
 });
 
 // @desc Updateuser (customer or vendor) by ID
