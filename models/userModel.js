@@ -39,7 +39,14 @@ const userSchema = mongoose.Schema({
         required: function() {
             return this.role === 'vendor'; // Location required only for vendors
         }
+    },
+    imageUrl: {
+        type: String,
+    },
+    bio: {
+        type: String,
     }
+
 }, {
     timestamps: true,
 });

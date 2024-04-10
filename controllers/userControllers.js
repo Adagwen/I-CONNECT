@@ -32,7 +32,9 @@ const signup = asyncHandler(async (req, res) => {
         phone,
         username,
         password: hashedPassword,
-        location: role === 'vendor' ? location : undefined // Location required only for vendors
+        location: role === 'vendor' ? location : undefined, // Location required only for vendors
+        imageUrl: rq.body.imageUrl,
+        bio: req.body.bio
     });
 
     console.log("user", user)
@@ -101,19 +103,7 @@ const getUsers = asyncHandler(async (req, res) => {
     res.status(200).json(users);
 });
 
-//@desc Get user (customer or vendor) by ID
-//@route GET /api/users/:id
-//@access private
-// const getUserById = asyncHandler(async (req, res) => {
-//     const { id } = req.params;
-//     const user = await User.findById(id);
-//     console.log(user)
-//     if (!user) {
-//         res.status(404);
-//         throw new Error("User not found");
-//     }
-//     res.status(200).json(user);
-// });
+
 
 const getUser = asyncHandler(async(req,res) => {
     console.log("i got here")
@@ -139,12 +129,6 @@ const updateUser = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error("User not found");
     }
-
-    // if (user.user_id.toString() !== req.user.id) {
-    //     res.status(403);
-    //     throw new Error("User does not have permission to update other users");
-    // }
-
     
     // Update user fields
     user.role = role;
@@ -154,52 +138,14 @@ const updateUser = asyncHandler(async (req, res) => {
     user.phone = phone;
     user.username = username;
     user.location = location;
-
-    // const updatedUser = await User.findByIdAndUpdate(
-    //     req.params.id,
-    //     req.body,
-    //     { new: true }
-    // );
+    user.imageUrl = imageUrl;
+    user.bio = bio;
 
      // Save the updated user
      const updatedUser = await user.save();
 
     res.status(200).json(updatedUser);
 });
-
-
-// const updateUser = asyncHandler(async (req, res) => {
-//     const user = await User.findById(req.params.id);
-//     if (!user) {
-//         res.status(404);
-//         throw new Error("User not found");
-//     }
-
-//     if (user.user_id.toString() !== req.user.id) {
-//         res.status(403);
-//         throw new Error("User does not have permission to update other users");
-//     }
-
-//     // Check if the request includes a password field
-//     if ('password' in req.body) {
-//         // If yes, hash the new password
-//         const hashedPassword = await bcrypt.hash(req.body.password, 10);
-//         // Update the password in the user document
-//         user.password = hashedPassword;
-//     } else {
-//         // If no password field is present, update other profile fields
-//         for (const key in req.body) {
-//             if (key !== 'role' && key !== 'password') {
-//                 // Only update fields other than role and password
-//                 user[key] = req.body[key];
-//             }
-//         }
-//     }
-
-//     // Save the updated user document
-//     const updatedUser = await user.save();
-//     res.status(200).json(updatedUser);
-// });
 
 
 //@desc Delete user (customer or vendor) by ID
@@ -213,10 +159,6 @@ const deleteUser = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error("User not found");
     }
-    // if (user.user_id.toString() !== req.user.id) {
-    //     res.status(403);
-    //     throw new Error("User does not have permission to delete other users");
-    // }
 
     await User.deleteOne({ _id: req.params.id });
     res.status(200).json({message: "User successfully deleted"});
