@@ -8,9 +8,9 @@ const { sendEmailNotification } = require("../notification-email/emailNotifier")
 //@route POST /api/users/register
 //@access public
 const signup = asyncHandler(async (req, res) => {
-    const { role, first_Name, last_Name, email, phone, username, password, location } = req.body;
+    const { role, first_Name, last_Name, email, phone, username, password, location, imageUrl, bio } = req.body;
     
-    if (!role || !first_Name || !last_Name || !email || !phone || !username || !password) {
+    if (!role || !first_Name || !last_Name || !email || !phone || !username || !password || !imageUrl || !bio) {
         return res.status(400).json({message: "All fields are mandatory"});
         //throw new Error("All fields are mandatory");
     }
@@ -20,6 +20,7 @@ const signup = asyncHandler(async (req, res) => {
         // throw new Error("Invalid Request.")
     }
 
+    
     // Making use of bcrypt to hash password
     const hashedPassword = await bcrypt.hash(password, 10);
     
@@ -33,8 +34,8 @@ const signup = asyncHandler(async (req, res) => {
         username,
         password: hashedPassword,
         location: role === 'vendor' ? location : undefined, // Location required only for vendors
-        imageUrl: rq.body.imageUrl,
-        bio: req.body.bio
+        imageUrl,//rq.body.imageUrl,
+        bio //req.body.bio
     });
 
     console.log("user", user)
@@ -125,7 +126,7 @@ const getUser = asyncHandler(async(req,res) => {
 // @access private
 const updateUser = asyncHandler(async (req, res) => {
     
-    const { role, first_Name, last_Name, email, phone, username, password, location } = req.body;
+    const { role, first_Name, last_Name, email, phone, username, password, location, imageUrl, bio } = req.body;
     const { id } = req.params;
 
     const user = await User.findById(id);
