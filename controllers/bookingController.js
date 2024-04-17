@@ -69,4 +69,24 @@ function generateRandomBookingId() {
 
 
 
-module.exports = { createBooking };
+// const allBookings = async (serviceId) => {
+//   try {
+//     // Find all bookings where the vendorServiceId matches the provided serviceId
+//     const bookings = await Booking.find({ vendorServiceId: serviceId });
+
+//     return bookings;
+//   } catch (error) {
+//     // Handle errors
+//     console.error('Error fetching bookings:', error);
+//     throw new Error('Failed to fetch bookings');
+//   }
+// };
+
+
+const allBookings = asyncHandler(async (req, res) => {
+  const users = await Booking.find(); 
+  res.status(200).json(users);
+});
+
+
+module.exports = { createBooking, allBookings };
