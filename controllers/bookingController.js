@@ -119,8 +119,7 @@ const completeBooking = asyncHandler(async (req, res) => {
     
   const { id } = req.params;
 
-   // Log the received ID to confirm
-   console.log('Received booking ID:', id);
+   console.log('Received booking ID:', id);// Log the received ID to confirm
 
   const booking = await Booking.findById(id);
   if (!booking) {
@@ -128,16 +127,31 @@ const completeBooking = asyncHandler(async (req, res) => {
       throw new Error("booking not found");
   }
   
-  // Update user fields
-  booking.status = "Completed";
-  
+  booking.status = "Completed"; // Update user fields
+   const updated = await booking.save();// Save the updated user
 
-   // Save the updated user
-   const updated = await booking.save();
+  res.status(200).json(updated);
+});
+
+//cancel booking
+const cancelBooking = asyncHandler(async (req, res) => {
+    
+  const { id } = req.params;
+
+   console.log('Received booking ID:', id);// Log the received ID to confirm
+
+  const booking = await Booking.findById(id);
+  if (!booking) {
+      res.status(404);
+      throw new Error("booking not found");
+  }
+  
+  booking.status = "cancelled"; // Update user fields
+   const updated = await booking.save();// Save the updated user
 
   res.status(200).json(updated);
 });
 
 
 
-module.exports = { createBooking, allBookings, acceptBooking, completeBooking};
+module.exports = { createBooking, allBookings, acceptBooking, completeBooking, cancelBooking};
