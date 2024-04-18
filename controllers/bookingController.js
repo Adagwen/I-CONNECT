@@ -27,7 +27,7 @@ const createBooking = asyncHandler(async (req, res) => {
     vendorId,
     vendorServiceId,
     dateTime,
-    status,
+    status: "Pending"
   };
   console.log(bookingData);
 
@@ -88,5 +88,56 @@ const allBookings = asyncHandler(async (req, res) => {
   res.status(200).json(users);
 });
 
+//accept booking 
+const acceptBooking = asyncHandler(async (req, res) => {
+    
+  const { id } = req.params;
 
-module.exports = { createBooking, allBookings };
+   // Log the received ID to confirm
+   console.log('Received booking ID:', id);
+
+  const booking = await Booking.findById(id);
+  if (!booking) {
+      res.status(404);
+      throw new Error("booking not found");
+  }
+  
+  // Update user fields
+  booking.status = "In-Progress";
+  
+
+   // Save the updated user
+   const updated = await booking.save();
+
+  res.status(200).json(updated);
+});
+
+
+
+//complete booking
+const completeBooking = asyncHandler(async (req, res) => {
+    
+  const { id } = req.params;
+
+   // Log the received ID to confirm
+   console.log('Received booking ID:', id);
+
+  const booking = await Booking.findById(id);
+  if (!booking) {
+      res.status(404);
+      throw new Error("booking not found");
+  }
+  
+  // Update user fields
+  booking.status = "Completed";
+  
+
+   // Save the updated user
+   const updated = await booking.save();
+
+  res.status(200).json(updated);
+});
+
+
+
+module.exports = { createBooking, allBookings, acceptBooking, completeBooking};
