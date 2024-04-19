@@ -115,9 +115,9 @@ const getUser = asyncHandler(async(req,res) => {
         throw new Error("User not found");
      }
      // Include availability if applicable
- const availability = user.role === 'vendor' ? 'away' : null;
+ const availability = user.role === 'vendor' ? user.availability : null;
 
- return res.status(200).json({ ...user._doc, availability }); 
+ return res.status(200).json({ ...user._doc, ...(availability && { availability }) }); 
     //return res.status(200).json(user);
 });
 

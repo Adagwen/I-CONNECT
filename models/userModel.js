@@ -41,6 +41,10 @@ const userSchema = mongoose.Schema({
     },
     bio: {
         type: String,
+    },
+    availability: {
+        type: Boolean,
+        default: true, 
     }
 
 }, {
