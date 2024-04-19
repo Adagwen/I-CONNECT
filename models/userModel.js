@@ -43,8 +43,9 @@ const userSchema = mongoose.Schema({
         type: String,
     },
     availability: {
-        type: Boolean,
-        default: true, 
+        type: String,
+        enum: ['Available', 'Away'],
+        default: 'Available', 
     }
 
 }, {
